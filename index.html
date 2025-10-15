@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Lulu!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #2a5298, #4a6fc1);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            height: 80vh;
+            position: relative;
+        }
+
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+            transform: translateX(100%);
+        }
+
+        .page.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(0);
+        }
+
+        .page-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to right, #ffffff, #a8d8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #a8d8ff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            max-width: 600px;
+        }
+
+        /* تصميم القفل */
+        .lock-container {
+            margin: 40px auto 60px;
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+
+        .lock-body {
+            width: 120px;
+            height: 100px;
+            background: linear-gradient(135deg, #4cd7ff, #2a9ef5);
+            border-radius: 15px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .lock-hole {
+            width: 30px;
+            height: 30px;
+            background: #1a2a6c;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .lock-top {
+            width: 80px;
+            height: 60px;
+            background: linear-gradient(135deg, #2a9ef5, #1e7fd5);
+            border-radius: 30px 30px 0 0;
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: transform 0.5s ease;
+        }
+
+        .lock-top.unlocked {
+            transform: translateX(-50%) rotate(45deg);
+        }
+
+        .password-input {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 15px 20px;
+            font-size: 1.3rem;
+            color: white;
+            text-align: center;
+            width: 200px;
+            margin: 20px auto;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .password-input:focus {
+            border-color: #4cd7ff;
+            box-shadow: 0 0 15px rgba(76, 215, 255, 0.5);
+        }
+
+        .password-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .error-message {
+            color: #ff6ba0;
+            margin-top: 10px;
+            font-size: 1rem;
+            min-height: 24px;
+        }
+
+        /* تصميم الكعكة */
+        .cake-container {
+            position: relative;
+            width: 220px;
+            height: 160px;
+            margin: 50px auto 70px;
+        }
+
+        .cake {
+            width: 180px;
+            height: 90px;
+            background: linear-gradient(to bottom, #ff9ec0, #ff6ba0);
+            border-radius: 12px 12px 0 0;
+            position: relative;
+            margin: 0 auto;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cake:before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 35px;
+            background: linear-gradient(to bottom, #ff6ba0, #ff4d8d);
+            border-radius: 12px;
+            top: -17px;
+            left: -10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .candle {
+            width: 12px;
+            height: 35px;
+            background: linear-gradient(to bottom, #4cd7ff, #2a9ef5);
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 6px 6px 0 0;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .flame {
+            width: 18px;
+            height: 28px;
+            background: linear-gradient(to bottom, #ffde59, #ff9d00);
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: flicker 1.5s infinite alternate;
+            box-shadow: 0 0 20px 8px rgba(255, 157, 0, 0.6);
+        }
+
+        @keyframes flicker {
+            0%, 100% { transform: translateX(-50%) scale(1) rotate(-2deg); opacity: 1; }
+            25% { transform: translateX(-50%) scale(1.05) rotate(1deg); opacity: 0.95; }
+            50% { transform: translateX(-50%) scale(1.1) rotate(2deg); opacity: 0.9; }
+            75% { transform: translateX(-50%) scale(1.05) rotate(-1deg); opacity: 0.95; }
+        }
+
+        .btn {
+            background: linear-gradient(to right, #4cd7ff, #2a9ef5);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 7px 20px rgba(44, 157, 255, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, #2a9ef5, #1e7fd5);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(44, 157, 255, 0.5);
+        }
+
+        .gift-box {
+            width: 170px;
+            height: 170px;
+            background: linear-gradient(135deg, #ff6ba0, #ff4d8d);
+            margin: 50px auto 70px;
+            position: relative;
+            border-radius: 12px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .gift-box:hover {
+            transform: scale(1.08) rotate(3deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .gift-lid {
+            width: 180px;
+            height: 35px;
+            background: linear-gradient(to bottom, #ff4d8d, #ff2d7a);
+            position: absolute;
+            top: -17px;
+            left: -5px;
+            border-radius: 12px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .gift-bow {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #4cd7ff, #2a9ef5);
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .gift-bow:before, .gift-bow:after {
+            content: '';
+            position: absolute;
+            width: 45px;
+            height: 25px;
+            background: linear-gradient(135deg, #4cd7ff, #2a9ef5);
+            border-radius: 50%;
+            top: 17px;
+        }
+
+        .gift-bow:before {
+            left: -40px;
+            transform: rotate(-30deg);
+        }
+
+        .gift-bow:after {
+            right: -40px;
+            transform: rotate(30deg);
+        }
+
+        .message-content {
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 18px;
+            padding: 30px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+
+        .message-content p {
+            margin-bottom: 18px;
+        }
+
+        .signature {
+            text-align: right;
+            font-style: italic;
+            margin-top: 25px;
+            font-size: 1.4rem;
+            color: #a8d8ff;
+            font-weight: 500;
+        }
+
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #ff6ba0;
+            transform: rotate(45deg);
+            opacity: 0;
+        }
+
+        .heart:before, .heart:after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #ff6ba0;
+            border-radius: 50%;
+        }
+
+        .heart:before {
+            top: -12px;
+            left: 0;
+        }
+
+        .heart:after {
+            top: 0;
+            left: -12px;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+            100% { transform: translateY(-120px) rotate(45deg); opacity: 0; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .balloons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .balloon {
+            position: absolute;
+            width: 45px;
+            height: 60px;
+            border-radius: 50%;
+            bottom: -70px;
+            opacity: 0;
+        }
+
+        .balloon:before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.7);
+            bottom: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        @keyframes floatBalloon {
+            0% { transform: translateY(0) rotate(0); opacity: 1; }
+            50% { transform: translateY(-50vh) rotate(5deg); opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(-5deg); opacity: 0; }
+        }
+
+        .instruction {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow: 0 0 10px 2px white;
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0) rotate(0); opacity: 0; }
+            50% { transform: scale(1) rotate(180deg); opacity: 1; }
+            100% { transform: scale(0) rotate(360deg); opacity: 0; }
+        }
+
+        .bottom-section {
+            margin-top: auto;
+        }
+
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.4rem; }
+            h2 { font-size: 1.9rem; }
+            p { font-size: 1.1rem; }
+            .container { height: 85vh; }
+            .page { padding: 25px 20px; }
+            .message-content { max-height: 350px; padding: 20px; }
+            .cake-container { width: 200px; height: 150px; margin: 40px auto 60px; }
+            .cake { width: 160px; height: 80px; }
+            .cake:before { width: 180px; }
+            .lock-container { margin: 30px auto 50px; }
+            .gift-box { margin: 40px auto 60px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- الصفحة الأولى: نفخ الشمعة -->
+        <div id="page1" class="page active">
+            <div class="page-content">
+                <h1>Happy Birthday Lulu!</h1>
+                <p>Blow out the candle to celebrate your birthday!</p>
+                
+                <div class="cake-container">
+                    <div class="cake">
+                        <div class="candle">
+                            <div class="flame" id="flame"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bottom-section">
+                <button class="btn" id="blowBtn">Blow the Candle</button>
+                <div class="instruction">Or speak loudly near the microphone</div>
+            </div>
+        </div>
+        
+        <!-- الصفحة الثانية: القفل -->
+        <div id="pageLock" class="page">
+            <div class="page-content">
+                <h2>Unlock Your Gift!</h2>
+                <p>Enter the secret code to unlock your birthday gift</p>
+                
+                <div class="lock-container">
+                    <div class="lock-top" id="lockTop"></div>
+                    <div class="lock-body">
+                        <div class="lock-hole"></div>
+                    </div>
+                </div>
+                
+                <input type="password" class="password-input" id="passwordInput" placeholder="Enter code" maxlength="4">
+                <div class="error-message" id="errorMessage"></div>
+            </div>
+            
+            <div class="bottom-section">
+                <button class="btn" id="unlockBtn">Unlock</button>
+            </div>
+        </div>
+        
+        <!-- الصفحة الثالثة: فتح الهدية -->
+        <div id="page2" class="page">
+            <div class="page-content">
+                <h2>Open Your Gift!</h2>
+                <p>Click on the gift to open it</p>
+                
+                <div class="gift-box" id="giftBox">
+                    <div class="gift-lid"></div>
+                    <div class="gift-bow"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- الصفحة الرابعة: الرسالة -->
+        <div id="page3" class="page">
+            <div class="page-content">
+                <h2>A Special Message For You</h2>
+                
+                <div class="message-content">
+                    <p>my dearest lulu,</p>
+                    
+                    <p>to this day, it's officially been 836 days since we've met, and in every single one of those days, i've only grown happier, all thanks to you.</p>
+                    
+                    <p>you've taught me how to look forward to another day, how to appreciate the little things in life, and most importantly, how to love truly, because i truly do love you.</p>
+                    
+                    <p>from the moment we first met in that group chat, i didn't know what to expect. i barely knew you until people started tying us with bbangiz, and at first, i just went along with it as a joke because i didn't think we'd ever click. you were reserved and quiet (which i love about you), and i was just hooting and hollering 24/7. but from that first private message, i knew we were in for a long ride, and i'm so, so glad i decided to hop on that train.</p>
+                    
+                    <p>you are always so selfless, putting people before yourself (which gives me mixed feelings, honestly), but you've taught me empathy because of it. sometimes, when i see something bad happen to someone, i'd normally just shrug it off, but then i imagine you beside me, whining about how poor they are, and i can't help but soften. i really, really love that about you, lulu. i love you, and i'll keep loving you even if the world tried to tear us apart.</p>
+                    
+                    <p>every time i see a silly snoopy shirt that makes absolutely no sense, i think of you and how excited you'd be. i'd definitely buy it, half-annoyed but secretly thrilled, because i'd do anything just to see you smile. every time i see the color blue, tulips, or an ugly dog, or anything you love, i think of you and how happy it would make you. i'd do anything to grant you every dream you've ever had.</p>
+                    
+                    <p>i want you to keep being you. i know it's cliché, but i mean it. never change just to please others. if they can't appreciate your loving heart and your wonderful soul, then they don't deserve even a single bit of you.</p>
+                    
+                    <p>i don't know how much of this promise I can keep, but i'll try my hardest to leave this country and finally meet you. i want us to stay in a cozy cottage in the italian countryside, where i'll force you to eat strawberries with me every day. i'll bake you dozens of donuts until you're sick of them, but you'll keep eating just to please me. we'll visit that stupid pink wall in la and act like we've traveled back to 2016, wearing chokers and ugly round sunglasses.</p>
+                    
+                    <p>we'll visit croata, and you'll show me every single place you grew up, every corner that holds a piece of your childhood. we'll find some dumb guinea pigs in a store and adopt one together. we'll cozy up at your house and watch brother bear in croatian dub so you can enjoy it to the fullest. that's all i want, for you to be happy and fulfilled. if i could, i'd sacrifice anything if it meant you'd get to be happy forever.</p>
+                    
+                    <p>turning 22 might sound big, but always remember i'll be here to annoy you, to play 22 by taylor on repeat, and to remind you how loved you are. i'll always be here to encourage you through this year, and the next, and the next, because you can do anything you set your mind to. that's one of the most beautiful things about you, and i hope you never lose it.</p>
+                    
+                    <p>lastly, happy 22nd birthday, my sweetest girl. enjoy this year to the fullest and cherish every single moment, because you only get to be 22 once. (and you better have 22 in your spotify wrapped, or you're getting blocked.)</p>
+                    
+                    <p>happy birthday, my love.<br>
+                    i wish you all the happiness in the world.</p>
+                    
+                    <div class="signature">
+                        love always,<br>
+                        miya
+                    </div>
+                    
+                    <p style="margin-top: 20px; font-style: italic;">(p.s. i've been sobbing the whole time i wrote this)</p>
+                </div>
+            </div>
+            
+            <div class="bottom-section">
+                <button class="btn" id="replayBtn">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="hearts" id="hearts"></div>
+    <div class="balloons" id="balloons"></div>
+
+    <script>
+        // العناصر الرئيسية
+        const page1 = document.getElementById('page1');
+        const pageLock = document.getElementById('pageLock');
+        const page2 = document.getElementById('page2');
+        const page3 = document.getElementById('page3');
+        const unlockBtn = document.getElementById('unlockBtn');
+        const passwordInput = document.getElementById('passwordInput');
+        const errorMessage = document.getElementById('errorMessage');
+        const lockTop = document.getElementById('lockTop');
+        const blowBtn = document.getElementById('blowBtn');
+        const flame = document.getElementById('flame');
+        const giftBox = document.getElementById('giftBox');
+        const replayBtn = document.getElementById('replayBtn');
+        const heartsContainer = document.getElementById('hearts');
+        const balloonsContainer = document.getElementById('balloons');
+
+        // كلمة السر
+        const correctPassword = "0507";
+
+        // إخفاء جميع الصفحات في البداية ما عدا الصفحة الأولى
+        function initializePages() {
+            pageLock.style.display = 'none';
+            page2.style.display = 'none';
+            page3.style.display = 'none';
+            page1.style.display = 'flex';
+        }
+
+        // فتح القفل
+        unlockBtn.addEventListener('click', unlock);
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                unlock();
+            }
+        });
+
+        function unlock() {
+            const enteredPassword = passwordInput.value;
+            
+            if (enteredPassword === correctPassword) {
+                // فتح القفل
+                lockTop.classList.add('unlocked');
+                errorMessage.textContent = "";
+                
+                // الانتقال إلى الصفحة التالية بعد تأخير
+                setTimeout(() => {
+                    pageLock.style.display = 'none';
+                    page2.style.display = 'flex';
+                    page2.classList.add('active');
+                }, 1000);
+            } else {
+                // عرض رسالة خطأ
+                errorMessage.textContent = "Incorrect code! Try again.";
+                passwordInput.value = "";
+                passwordInput.focus();
+                
+                // تأثير اهتزاز
+                passwordInput.style.animation = 'none';
+                setTimeout(() => {
+                    passwordInput.style.animation = 'shake 0.5s';
+                }, 10);
+            }
+        }
+
+        // الانتقال إلى الصفحة الثانية عند النفخ على الشمعة
+        blowBtn.addEventListener('click', blowCandle);
+        
+        // استخدام Web Audio API للكشف عن الصوت
+        let audioContext;
+        let microphone;
+        let analyser;
+        let javascriptNode;
+        
+        function setupAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(function(stream) {
+                        microphone = audioContext.createMediaStreamSource(stream);
+                        analyser = audioContext.createAnalyser();
+                        javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+                        
+                        analyser.smoothingTimeConstant = 0.8;
+                        analyser.fftSize = 1024;
+                        
+                        microphone.connect(analyser);
+                        analyser.connect(javascriptNode);
+                        javascriptNode.connect(audioContext.destination);
+                        
+                        javascriptNode.onaudioprocess = function() {
+                            const array = new Uint8Array(analyser.frequencyBinCount);
+                            analyser.getByteFrequencyData(array);
+                            let values = 0;
+                            
+                            const length = array.length;
+                            for (let i = 0; i < length; i++) {
+                                values += array[i];
+                            }
+                            
+                            const average = values / length;
+                            
+                            // إذا كان الصوت عاليًا بما يكفي، نفخ الشمعة
+                            if (average > 60) {
+                                blowCandle();
+                            }
+                        };
+                    })
+                    .catch(function(err) {
+                        console.error('Error accessing microphone:', err);
+                    });
+            } catch (e) {
+                console.error('Web Audio API is not supported in this browser:', e);
+            }
+        }
+        
+        // بدء إعداد الصوت عند تحميل الصفحة
+        window.addEventListener('load', function() {
+            initializePages();
+            setupAudio();
+        });
+        
+        // وظيفة نفخ الشمعة
+        function blowCandle() {
+            // إخفاء اللهب
+            flame.style.display = 'none';
+            
+            // إنشاء قلوب متطايرة
+            createHearts();
+            
+            // إنشاء بريق
+            createSparkles();
+            
+            // الانتقال إلى الصفحة التالية بعد تأخير
+            setTimeout(() => {
+                page1.style.display = 'none';
+                pageLock.style.display = 'flex';
+                pageLock.classList.add('active');
+            }, 2000);
+        }
+        
+        // فتح الهدية والانتقال إلى الرسالة
+        giftBox.addEventListener('click', function() {
+            // إنبالونات
+            createBalloons();
+            
+            // الانتقال إلى الصفحة التالية بعد تأخير
+            setTimeout(() => {
+                page2.style.display = 'none';
+                page3.style.display = 'flex';
+                page3.classList.add('active');
+            }, 1500);
+        });
+        
+        // إعادة التشغيل
+        replayBtn.addEventListener('click', function() {
+            // إعادة تعيين كل شيء
+            flame.style.display = 'block';
+            lockTop.classList.remove('unlocked');
+            passwordInput.value = "";
+            page3.style.display = 'none';
+            page1.style.display = 'flex';
+            page1.classList.add('active');
+        });
+        
+        // إنشاء قلوب متطايرة
+        function createHearts() {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    
+                    // وضع عشوائي
+                    const left = Math.random() * 100;
+                    heart.style.left = `${left}%`;
+                    
+                    // لون عشوائي
+                    const colors = ['#ff6ba0', '#4cd7ff', '#a8d8ff', '#ff9ec0'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    heart.style.background = color;
+                    heart.style.setProperty('--heart-color', color);
+                    
+                    heartsContainer.appendChild(heart);
+                    
+                    // تطبيق الرسوم المتحركة
+                    heart.style.animation = `floatUp ${1 + Math.random()}s ease forwards`;
+                    
+                    // إزالة القلب بعد انتهاء الرسوم المتحركة
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 2000);
+                }, i * 200);
+            }
+        }
+        
+        // إنشاء بالونات متطايرة
+        function createBalloons() {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const balloon = document.createElement('div');
+                    balloon.classList.add('balloon');
+                    
+                    // وضع عشوائي
+                    const left = Math.random() * 100;
+                    balloon.style.left = `${left}%`;
+                    
+                    // لون عشوائي
+                    const colors = ['#ff6ba0', '#4cd7ff', '#a8d8ff', '#ff9ec0', '#ffde59'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    balloon.style.background = color;
+                    
+                    balloonsContainer.appendChild(balloon);
+                    
+                    // تطبيق الرسوم المتحركة
+                    const duration = 5 + Math.random() * 5;
+                    balloon.style.animation = `floatBalloon ${duration}s ease forwards`;
+                    
+                    // إزالة البالون بعد انتهاء الرسوم المتحركة
+                    setTimeout(() => {
+                        balloon.remove();
+                    }, duration * 1000);
+                }, i * 300);
+            }
+        }
+        
+        // إنشاء بريق
+        function createSparkles() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.classList.add('sparkle');
+                    
+                    // وضع عشوائي حول الكعكة
+                    const left = 40 + Math.random() * 20;
+                    const top = 40 + Math.random() * 20;
+                    sparkle.style.left = `${left}%`;
+                    sparkle.style.top = `${top}%`;
+                    
+                    document.body.appendChild(sparkle);
+                    
+                    // تطبيق الرسوم المتحركة
+                    sparkle.style.animation = `sparkle ${0.5 + Math.random()}s ease forwards`;
+                    
+                    // إزالة البريق بعد انتهاء الرسوم المتحركة
+                    setTimeout(() => {
+                        sparkle.remove();
+                    }, 1000);
+                }, i * 100);
+            }
+        }
+
+        // إضافة تأثير اهتزاز للإدخال الخاطئ
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
